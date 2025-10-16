@@ -215,7 +215,7 @@
                     <p class="mt-2 text-center text-brand-medium">Partagez ce lien unique avec vos amis pour remplir le groupe avant Dimanche 19h.</p>
                     
                     <div class="mt-8 flex">
-                        <input type="text" id="share-link" readonly value="https://cobuy.fr/join/XYZ123" class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
+                        <input type="text" id="share-link" readonly value="invitation-groupe.html" class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
                         <button onclick="copyLink()" class="bg-slate-200 px-4 rounded-r-lg hover:bg-slate-300 transition-colors flex items-center justify-center">
                             <i data-lucide="copy" class="w-5 h-5 text-brand-dark"></i>
                         </button>
@@ -223,27 +223,27 @@
                     <p id="copy-feedback" class="text-center text-sm text-brand-blue font-semibold h-5 mt-1"></p>
                     
                      <div class="mt-4 grid grid-cols-3 gap-4">
-                        <a href="#" id="whatsapp-share-btn" class="flex flex-col items-center justify-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors space-y-1">
+                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors space-y-1">
                             <i data-lucide="message-circle" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">WhatsApp</span>
                         </a>
-                         <a href="#" id="instagram-share-btn" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
+                         <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
                             <i data-lucide="instagram" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Instagram</span>
                         </a>
-                         <a href="#" id="tiktok-share-btn" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
+                         <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
                             <i data-lucide="clapperboard" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">TikTok</span>
                         </a>
-                        <a href="#" id="discord-share-btn" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
+                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
                             <i data-lucide="message-square" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Discord</span>
                         </a>
-                        <a href="#" id="signal-share-btn" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
+                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
                             <i data-lucide="send" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Signal</span>
                         </a>
-                        <a href="#" id="twitter-share-btn" class="flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors space-y-1">
+                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors space-y-1">
                             <i data-lucide="twitter" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">X / Twitter</span>
                         </a>
@@ -396,48 +396,6 @@
 
             openModal('group-creation-modal');
             document.getElementById('group-modal-title').textContent = `${product.name} - Prix groupé : ${product.groupPrice}`;
-
-            const ctx = document.getElementById('priceBreakdownChart').getContext('2d');
-            
-            if(priceBreakdownChart) {
-                priceBreakdownChart.destroy();
-            }
-
-            priceBreakdownChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Part du Producteur', 'Part de CoBuy', 'Frais & Taxes'],
-                    datasets: [{
-                        data: [65, 25, 10], // Example data
-                        backgroundColor: ['#3b82f6', '#94a3b8', '#f59e0b'],
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#64748b',
-                                boxWidth: 12,
-                                padding: 20,
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}%`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
         }
         
         function openModal(modalId) {
@@ -506,17 +464,11 @@
             } else {
                 linkInput.select();
             }
+            document.execCommand('copy');
 
-            try {
-                document.execCommand('copy');
-                const feedback = document.getElementById('copy-feedback');
-                feedback.textContent = 'Lien copié !';
-                setTimeout(() => { feedback.textContent = ''; }, 2000);
-            } catch (err) {
-                 const feedback = document.getElementById('copy-feedback');
-                feedback.textContent = 'Erreur de copie';
-                setTimeout(() => { feedback.textContent = ''; }, 2000);
-            }
+            const feedback = document.getElementById('copy-feedback');
+            feedback.textContent = 'Lien copié !';
+            setTimeout(() => { feedback.textContent = ''; }, 2000);
         }
 
 
@@ -628,46 +580,6 @@
             clientSpaceTabs.forEach(tab => {
                 tab.addEventListener('click', () => changeTab(tab.dataset.tab));
             });
-
-            const scenarios = {
-                lancement: { members: 500, maxRevenue: 5000, defaultRevenue: 2500 },
-                croissance: { members: 5000, maxRevenue: 50000, defaultRevenue: 22000 },
-                etabli: { members: 25000, maxRevenue: 200000, defaultRevenue: 110000 }
-            };
-            let currentScenario = 'lancement';
-
-            const hubSlider = document.getElementById('hubSlider');
-            const revenueValue = document.getElementById('revenueValue');
-            const userShare = document.getElementById('userShare');
-            const memberCountEl = document.getElementById('memberCount');
-            const scenarioButtons = document.querySelectorAll('.scenario-button');
-
-            function updateSimulation() {
-                const revenue = parseFloat(hubSlider.value);
-                const { members } = scenarios[currentScenario];
-                revenueValue.textContent = `${revenue.toLocaleString('fr-FR')} €`;
-                memberCountEl.textContent = `${members.toLocaleString('fr-FR')}`;
-                const communityPot = revenue * 0.50;
-                const individualShare = communityPot / members;
-                userShare.textContent = `${individualShare.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`;
-            };
-            function updateScenario(scenarioKey) {
-                currentScenario = scenarioKey;
-                const scenario = scenarios[scenarioKey];
-                hubSlider.max = scenario.maxRevenue;
-                hubSlider.value = scenario.defaultRevenue;
-                scenarioButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if(btn.dataset.scenario === scenarioKey) btn.classList.add('active');
-                });
-                updateSimulation();
-            };
-
-            if (hubSlider) {
-                scenarioButtons.forEach(btn => btn.addEventListener('click', () => updateScenario(btn.dataset.scenario)));
-                hubSlider.addEventListener('input', updateSimulation);
-                updateScenario('lancement');
-            }
         });
 
         function changeTab(tabId) {
