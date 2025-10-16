@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vous êtes invité ! - CoBuy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
+        html {
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f8fafc;
+        }
+        .text-brand-dark { color: #1e293b; }
+        .text-brand-medium { color: #64748b; }
+        .bg-brand-blue { background-color: #3b82f6; }
+        .text-brand-blue { color: #3b82f6; }
+    </style>
+</head>
+<body class="antialiased text-brand-dark">
+
+    <header class="border-b border-slate-200">
+        <nav class="max-w-4xl mx-auto px-6 py-6 flex justify-between items-center">
+            <div>
+                <a href="cobuy-vitrine.html" class="text-3xl font-extrabold text-brand-dark tracking-tighter">CoBuy</a>
+                <p class="text-xs text-brand-medium -mt-1 tracking-wider font-semibold">L'EFFET GROUPE</p>
+            </div>
+            <p class="font-semibold text-brand-medium">Vous êtes invité !</p>
+        </nav>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-6 py-12">
+        <div class="text-center">
+            <p class="text-xl text-brand-medium">
+                <span class="font-bold text-brand-dark">Marie D.</span> vous invite à rejoindre son groupe pour profiter d'un super prix !
+            </p>
+        </div>
+
+        <div class="mt-8 bg-white rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=800&h=600&auto=format&fit=crop" alt="Miel de Fleurs" class="w-full h-64 object-cover">
+            <div class="p-6">
+                <p class="text-sm font-semibold text-brand-medium">Apiculteur Local</p>
+                <h1 class="text-2xl font-bold text-brand-dark mt-1">Miel de Fleurs</h1>
+                <div class="flex items-baseline justify-center space-x-3 mt-4">
+                    <span class="text-4xl font-extrabold text-brand-blue">8,50 €</span>
+                    <span class="text-xl font-semibold text-brand-medium line-through">12,50 €</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <h2 class="text-lg font-bold text-brand-dark">Le groupe se termine dans :</h2>
+            <p id="countdown" class="text-3xl font-extrabold text-brand-blue mt-2">2j 15h 30m 10s</p>
+        </div>
+
+        <div class="mt-8">
+             <h3 class="text-lg font-bold text-brand-dark text-center mb-4">Progression du groupe</h3>
+            <div class="flex justify-center items-center space-x-4">
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-16 h-16 rounded-full bg-brand-blue flex items-center justify-center">
+                        <i data-lucide="user-check" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-brand-medium">Marie D.</p>
+                </div>
+                 <div><i data-lucide="plus" class="w-8 h-8 text-slate-300"></i></div>
+                 <div class="flex flex-col items-center space-y-1">
+                    <div class="w-16 h-16 rounded-full bg-slate-200 border-2 border-dashed border-slate-400 flex items-center justify-center">
+                        <i data-lucide="user-plus" class="w-8 h-8 text-slate-500"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-brand-medium">Vous ?</p>
+                </div>
+                 <div><i data-lucide="plus" class="w-8 h-8 text-slate-300"></i></div>
+                 <div class="flex flex-col items-center space-y-1">
+                    <div class="w-16 h-16 rounded-full bg-slate-200 border-2 border-dashed border-slate-400 flex items-center justify-center">
+                        <i data-lucide="user" class="w-8 h-8 text-slate-500"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-brand-medium">1 place</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10">
+            <button class="w-full bg-brand-blue text-white text-lg font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-transform hover:scale-105">
+                Rejoindre le groupe de Marie
+            </button>
+        </div>
+
+        <div class="mt-12 border-t border-slate-200 pt-8 text-center">
+            <h3 class="text-lg font-bold text-brand-dark">Comment ça marche ?</h3>
+            <div class="grid grid-cols-3 gap-4 mt-4 text-brand-medium">
+                <div>
+                    <i data-lucide="mouse-pointer-click" class="w-8 h-8 mx-auto text-brand-blue"></i>
+                    <p class="text-sm mt-2">1. Vous rejoignez le groupe</p>
+                </div>
+                <div>
+                    <i data-lucide="users" class="w-8 h-8 mx-auto text-brand-blue"></i>
+                    <p class="text-sm mt-2">2. Le groupe se remplit avant la fin du temps</p>
+                </div>
+                <div>
+                    <i data-lucide="party-popper" class="w-8 h-8 mx-auto text-brand-blue"></i>
+                    <p class="text-sm mt-2">3. Tout le monde profite du super prix !</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

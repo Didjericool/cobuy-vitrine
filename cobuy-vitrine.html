@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoBuy - L'Effet Groupe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
+        html {
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f8fafc; /* Slate 50 */
+        }
+        .text-brand-dark { color: #1e293b; } /* Slate 800 */
+        .text-brand-medium { color: #64748b; } /* Slate 500 */
+        .bg-brand-blue { background-color: #3b82f6; } /* Blue 500 */
+        .text-brand-blue { color: #3b82f6; }
+        .border-brand-blue { border-color: #3b82f6; }
+        .accent-brand-blue { accent-color: #3b82f6; }
+        .bg-brand-yellow { background-color: #f59e0b; } /* Amber 500 */
+        .text-brand-yellow { color: #f59e0b; }
+
+        .category-button.active {
+            color: white;
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .modal-enter { animation: fadeIn 0.3s ease-out forwards; }
+        .modal-leave { animation: fadeOut 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(10px); } }
+        
+        .client-space-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        .client-space-tab:not(.active) {
+            border-bottom-color: transparent;
+        }
+        .logistics-choice:checked + label {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="antialiased text-brand-dark">
+
+    <div id="app">
+        <!-- HEADER -->
+        <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20 md:h-24">
+                    <div class="w-1/3 flex justify-start">
+                        <button class="p-2 rounded-full hover:bg-slate-100 transition-colors md:hidden">
+                            <i data-lucide="search" class="w-6 h-6 text-brand-medium"></i>
+                        </button>
+                        <div class="relative hidden md:block">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-medium"></i>
+                            <input type="text" placeholder="Rechercher un produit..." class="pl-12 pr-4 py-3 w-full max-w-xs bg-slate-100 rounded-full border-transparent focus:outline-none focus:ring-2 focus:ring-brand-blue">
+                        </div>
+                    </div>
+                    <div class="w-1/3 text-center">
+                        <a href="#" class="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tighter">CoBuy</a>
+                        <p class="text-xs text-brand-medium -mt-1 tracking-wider font-semibold hidden sm:block">L'EFFET GROUPE</p>
+                    </div>
+                    <div class="w-1/3 flex items-center justify-end space-x-1 md:space-x-4">
+                        <button onclick="openAboutModal()" class="hidden lg:block text-brand-medium hover:text-brand-dark transition-colors font-semibold">Notre Mission</button>
+                        <button onclick="openLoginModal()" class="hidden md:block text-brand-medium hover:text-brand-dark transition-colors font-semibold">Se connecter</button>
+                         <button class="p-2 rounded-full hover:bg-slate-100 transition-colors relative">
+                            <i data-lucide="shopping-cart" class="w-6 h-6 text-brand-medium"></i>
+                        </button>
+                        <button onclick="openClientSpace()" class="p-2 rounded-full hover:bg-slate-100 transition-colors">
+                            <i data-lucide="user-circle-2" class="w-6 h-6 text-brand-medium"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <section class="text-center py-20 sm:py-28 px-4">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-dark tracking-tighter">
+                    Achetez moins cher, <span class="text-brand-blue">ensemble.</span>
+                </h1>
+                <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-brand-medium">
+                    La force du groupe pour votre portefeuille. Fini les intermédiaires, place aux économies.
+                </p>
+                <a href="#produits" class="mt-10 inline-block bg-brand-blue text-white text-lg font-bold py-4 px-10 rounded-full shadow-lg shadow-blue-500/20 transition-transform hover:scale-105">
+                    Voir les produits
+                </a>
+            </section>
+
+            <section id="produits" class="py-20 md:py-28 scroll-mt-24 bg-white border-t border-b border-slate-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark tracking-tighter">Le Marché</h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-brand-medium">Plus on est, moins c'est cher. C'est aussi simple que ça.</p>
+                    </div>
+                    <div id="category-filters" class="flex flex-wrap justify-center gap-4 mb-12">
+                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="tous"><i data-lucide="layout-grid" class="w-5 h-5"></i><span>Tous</span></button>
+                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="eliquide"><i data-lucide="droplet" class="w-5 h-5"></i><span>E-Liquides</span></button>
+                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="epicerie"><i data-lucide="shopping-basket" class="w-5 h-5"></i><span>Épicerie</span></button>
+                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="boissons"><i data-lucide="cup-soda" class="w-5 h-5"></i><span>Boissons</span></button>
+                    </div>
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+                </div>
+            </section>
+            
+            <section id="philosophie" class="py-20 md:py-28 scroll-mt-24">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                         <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark tracking-tighter">Un modèle économique fait pour <span class="text-brand-blue">vous</span>.</h2>
+                        <p class="mt-4 max-w-3xl mx-auto text-lg text-brand-medium">On change les règles du jeu. Voici comment.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 mb-16">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center">
+                             <div class="flex items-center justify-center h-12 w-12 rounded-full bg-slate-100 mx-auto">
+                                <i data-lucide="lock" class="w-6 h-6 text-slate-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark mt-4">Le Modèle Standard (GAFAM, etc.)</h3>
+                            <p class="mt-2 text-brand-medium">Votre attention est un produit. La valeur est pour la plateforme, pas pour vous.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border-2 border-brand-blue shadow-lg shadow-blue-500/10 text-center">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mx-auto">
+                                <i data-lucide="unlock" class="w-6 h-6 text-brand-blue"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark mt-4">Notre Modèle : La Communauté Gagnante</h3>
+                            <p class="mt-2 text-brand-medium">Votre attention est une force. La valeur générée est partagée. **50% pour vous / 50% pour le projet.**</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="border-t border-slate-200 mt-20 bg-white">
+            <div class="max-w-7xl mx-auto py-16 px-6 lg:px-8 text-center">
+                <p class="text-3xl font-extrabold text-brand-dark tracking-tighter">CoBuy</p>
+                <p class="mt-2 text-sm text-brand-medium font-semibold tracking-wider">L'EFFET GROUPE</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- MODALS -->
+    <div id="modal-container">
+        <!-- GROUP CREATION MODAL -->
+        <div id="group-creation-modal" class="fixed inset-0 z-50 items-center justify-center hidden" onclick="closeModal('group-creation-modal')">
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div id="group-creation-modal-content" class="relative bg-white rounded-2xl w-11/12 max-w-2xl p-8 modal-enter" onclick="event.stopPropagation()">
+                
+                <!-- Step 1: Main View -->
+                <div id="group-step-1">
+                    <h2 id="group-modal-title" class="text-2xl font-bold text-brand-dark text-center"></h2>
+                    <div class="mt-8 p-4 bg-blue-50 border-l-4 border-brand-blue">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="clock" class="h-5 w-5 text-brand-blue"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-brand-blue">
+                                    <span class="font-bold">Le rendez-vous des économies :</span> Tous les groupes se terminent le <span class="font-bold">Dimanche à 19h</span>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 items-center mt-6">
+                        <div>
+                            <h3 class="font-bold text-brand-dark text-center">La Transparence CoBuy</h3>
+                            <div class="max-w-xs mx-auto h-56 mt-4">
+                                <canvas id="priceBreakdownChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-brand-dark">Comment recevoir votre commande ?</h3>
+                            <div class="mt-4 space-y-3">
+                                <input type="radio" name="logistics" id="choice1" class="hidden logistics-choice" checked>
+                                <label for="choice1" class="w-full text-left p-3 rounded-xl border-2 border-slate-300 hover:border-brand-blue cursor-pointer transition-colors block">
+                                    <h4 class="font-semibold text-brand-dark">Point Relais de Quartier</h4>
+                                    <p class="text-xs text-brand-medium">Simple et économique. Récupérez votre panier chez un commerçant près de chez vous.</p>
+                                </label>
+                                <input type="radio" name="logistics" id="choice2" class="hidden logistics-choice">
+                                <label for="choice2" class="w-full text-left p-3 rounded-xl border-2 border-slate-300 hover:border-brand-blue cursor-pointer transition-colors block">
+                                    <h4 class="font-semibold text-brand-dark">Devenir Voisin-Relais</h4>
+                                    <p class="text-xs text-brand-medium">Recevez la commande du groupe chez vous et créez du lien.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="goToStep2()" class="w-full mt-8 bg-brand-blue text-white py-3 font-bold rounded-lg flex items-center justify-center transition-transform hover:scale-105">
+                        Créer le groupe et partager
+                    </button>
+
+                    <div class="relative text-center my-6">
+                        <hr class="border-slate-200">
+                        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-2 text-sm font-semibold text-brand-medium">OU</span>
+                    </div>
+
+                     <div>
+                        <button onclick="goToJoinStep()" class="w-full text-center py-3 rounded-lg bg-brand-blue text-white font-bold transition-colors hover:bg-opacity-90 flex items-center justify-center space-x-2">
+                            Rejoindre un groupe existant
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Step 2: Share -->
+                <div id="group-step-2" class="hidden">
+                    <button onclick="goToStep1()" class="absolute top-4 left-4 text-slate-400 hover:text-brand-dark"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
+                    <h2 class="text-2xl font-bold text-brand-dark text-center">Votre groupe est créé !</h2>
+                    <p class="mt-2 text-center text-brand-medium">Partagez ce lien unique avec vos amis pour remplir le groupe avant Dimanche 19h.</p>
+                    
+                    <div class="mt-8 flex">
+                        <input type="text" id="share-link" readonly value="https://cobuy.fr/join/XYZ123" class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
+                        <button onclick="copyLink()" class="bg-slate-200 px-4 rounded-r-lg hover:bg-slate-300 transition-colors flex items-center justify-center">
+                            <i data-lucide="copy" class="w-5 h-5 text-brand-dark"></i>
+                        </button>
+                    </div>
+                    <p id="copy-feedback" class="text-center text-sm text-brand-blue font-semibold h-5 mt-1"></p>
+                    
+                     <div class="mt-4 grid grid-cols-3 gap-4">
+                        <a href="#" id="whatsapp-share-btn" class="flex flex-col items-center justify-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors space-y-1">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">WhatsApp</span>
+                        </a>
+                         <a href="#" id="instagram-share-btn" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
+                            <i data-lucide="instagram" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">Instagram</span>
+                        </a>
+                         <a href="#" id="tiktok-share-btn" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
+                            <i data-lucide="clapperboard" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">TikTok</span>
+                        </a>
+                        <a href="#" id="discord-share-btn" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
+                            <i data-lucide="message-square" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">Discord</span>
+                        </a>
+                        <a href="#" id="signal-share-btn" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
+                            <i data-lucide="send" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">Signal</span>
+                        </a>
+                        <a href="#" id="twitter-share-btn" class="flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors space-y-1">
+                            <i data-lucide="twitter" class="w-6 h-6"></i>
+                            <span class="text-sm font-semibold">X / Twitter</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Step 3: Join a group -->
+                <div id="group-step-3" class="hidden">
+                     <button onclick="goToStep1()" class="absolute top-4 left-4 text-slate-400 hover:text-brand-dark"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
+                    <h2 class="text-2xl font-bold text-brand-dark text-center">Rejoindre un groupe</h2>
+                    <p class="mt-2 text-center text-brand-medium">Voici les groupes ouverts pour ce produit près de chez vous.</p>
+                     <div class="mt-6 space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <div>
+                                <p class="font-semibold text-brand-dark">Groupe de Marie D.</p>
+                                <p class="text-xs text-brand-medium">Point Relais : Le Narval (Wazemmes)</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-brand-blue">2/3 places</p>
+                                <button class="text-xs font-bold text-white bg-brand-blue px-3 py-1 rounded-full mt-1 hover:bg-opacity-80">Rejoindre</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <div>
+                                <p class="font-semibold text-brand-dark">Groupe de Paul L.</p>
+                                <p class="text-xs text-brand-medium">Voisin-Relais : Rue Gambetta</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-brand-blue">1/3 places</p>
+                                <button class="text-xs font-bold text-white bg-brand-blue px-3 py-1 rounded-full mt-1 hover:bg-opacity-80">Rejoindre</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="closeModal('group-creation-modal', event)" class="absolute top-4 right-4 text-slate-400 hover:text-brand-dark">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CLIENT SPACE MODAL -->
+         <div id="client-space-modal" class="fixed inset-0 z-[60] hidden" onclick="closeModal('client-space-modal')">
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div id="client-space-content" class="relative bg-white w-full h-full md:h-auto md:max-w-3xl md:mx-auto md:my-12 md:rounded-2xl shadow-2xl flex flex-col modal-enter" onclick="event.stopPropagation()">
+                <div class="flex-shrink-0 flex items-center justify-between p-4 border-b border-slate-200">
+                    <h2 class="text-xl font-bold text-brand-dark">Mon Espace</h2>
+                    <button onclick="closeModal('client-space-modal', event)" class="p-2 rounded-full hover:bg-slate-100 transition-colors">
+                        <i data-lucide="x" class="w-6 h-6 text-brand-medium"></i>
+                    </button>
+                </div>
+                <nav class="flex-shrink-0 flex border-b border-slate-200 px-2">
+                    <button class="client-space-tab px-4 py-3 font-semibold border-b-2 text-brand-medium" data-tab="tab-groupes">Groupes en Cours</button>
+                    <button class="client-space-tab px-4 py-3 font-semibold border-b-2 text-brand-medium" data-tab="tab-commandes">Mes Commandes</button>
+                    <button class="client-space-tab px-4 py-3 font-semibold border-b-2 text-brand-medium" data-tab="tab-hub">Mon Espace Partenaire</button>
+                </nav>
+                <div class="flex-grow p-6 overflow-y-auto bg-slate-50 md:rounded-b-2xl">
+                    <div id="tab-commandes" class="tab-content hidden space-y-4"></div>
+                    <div id="tab-hub" class="tab-content hidden"></div>
+                    <div id="tab-groupes" class="tab-content hidden space-y-6"></div>
+                </div>
+            </div>
+        </div>
+         <div id="login-modal" class="fixed inset-0 z-50 items-center justify-center hidden" onclick="closeModal('login-modal')">
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div id="login-modal-content" class="relative bg-white rounded-2xl w-11/12 max-w-sm p-8 modal-enter" onclick="event.stopPropagation()">
+                 <h2 class="text-2xl font-bold text-brand-dark text-center">Bienvenue</h2>
+                 <p class="mt-2 text-center text-brand-medium">Connectez-vous pour rejoindre la communauté.</p>
+                 <form class="mt-8 space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-brand-dark">Email</label>
+                        <input type="email" id="email" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
+                    </div>
+                     <div>
+                        <label for="password" class="block text-sm font-medium text-brand-dark">Mot de passe</label>
+                        <input type="password" id="password" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
+                    </div>
+                    <button type="submit" class="w-full mt-6 bg-brand-blue text-white py-3 font-bold rounded-lg flex items-center justify-center transition-transform hover:scale-105">
+                        Se connecter
+                    </button>
+                    <p class="text-center text-sm text-brand-medium mt-4">Pas encore membre ? <a href="#" class="font-semibold text-brand-blue hover:underline">Inscrivez-vous</a></p>
+                 </form>
+                 <button onclick="closeModal('login-modal', event)" class="absolute top-4 right-4 text-slate-400 hover:text-brand-dark">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <div id="about-modal" class="fixed inset-0 z-50 items-center justify-center hidden" onclick="closeModal('about-modal')">
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div id="about-modal-content" class="relative bg-white rounded-2xl w-11/12 max-w-2xl p-8 lg:p-12 modal-enter text-center" onclick="event.stopPropagation()">
+                <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mx-auto mb-8">
+                    <i data-lucide="heart-handshake" class="w-8 h-8 text-brand-blue"></i>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-extrabold text-brand-dark tracking-tighter">Notre Mission</h2>
+                <p class="mt-6 text-base lg:text-lg text-brand-medium leading-relaxed">
+                   CoBuy est né d'une idée simple : redonner le pouvoir d'achat aux gens. En connectant directement les consommateurs aux producteurs et industriels, et en utilisant la force du groupe, nous supprimons les intermédiaires coûteux. Notre mission est de rendre les produits du quotidien plus accessibles à tous, des quartiers aux villages. Nous croyons à un modèle économique transparent où les économies sont pour vous, pas pour le système.
+                </p>
+                <button onclick="closeModal('about-modal', event)" class="absolute top-4 right-4 text-slate-400 hover:text-brand-dark">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        const products = [
+             { id: 1, name: 'Menthe Glaciale', category: 'eliquide', desc: 'Une vague de fraîcheur intense.', price: '19,90 €', groupPrice: '12,90 €', img: 'https://images.unsplash.com/photo-1614213853103-68e4c3b00609?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Vapeur du Nord' },
+             { id: 2, name: 'Caramel Fou', category: 'eliquide', desc: 'La douceur d\'un caramel au beurre salé.', price: '21,90 €', groupPrice: '14,90 €', img: 'https://images.unsplash.com/photo-1542025752763-a2a89326b876?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Vapeur du Nord' },
+             { id: 4, name: 'Miel de Fleurs', category: 'epicerie', desc: 'Un miel polyfloral doux et onctueux.', price: '12,50 €', groupPrice: '8,50 €', img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Apiculteur Local' },
+             { id: 6, name: 'Bière Blonde', category: 'boissons', desc: 'Une bière légère et rafraîchissante.', price: '4,50 €', groupPrice: '3,00 €', img: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Brasserie Régionale' },
+             { id: 5, name: 'Terrine de Campagne', category: 'epicerie', desc: 'Recette traditionnelle, un classique.', price: '8,90 €', groupPrice: '5,90 €', img: 'https://images.unsplash.com/photo-1599599810694-b5b37306c459?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Artisan Charcutier' },
+             { id: 7, name: 'Jus de Pomme', category: 'boissons', desc: '100% pur jus, sans sucres ajoutés.', price: '6,20 €', groupPrice: '4,20 €', img: 'https://images.unsplash.com/photo-1591735161314-726c5147814c?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Le Verger d\'à côté' },
+        ];
+        const orders = [
+            { id: 'CMD-123', productId: 4, date: '10/10/2025', status: 'validé', price: 8.50, breakdown: { producer: 5.50, platform: 1.15, fees: 0.35, tva: 1.50 } },
+            { id: 'CMD-124', productId: 6, date: '11/10/2025', status: 'en cours', groupSize: 3, members: 1, timeLeft: '23h 15m' },
+            { id: 'CMD-125', productId: 2, date: '08/10/2025', status: 'livré', price: 14.90, breakdown: { producer: 9.80, platform: 2.50, fees: 0.50, tva: 2.10 } }
+        ];
+
+        const productGrid = document.getElementById('product-grid');
+        function renderProducts(filter = 'tous') {
+            productGrid.innerHTML = '';
+            const filteredProducts = filter === 'tous' ? products : products.filter(p => p.category === filter);
+            filteredProducts.forEach(product => {
+                const card = `
+                    <div class="product-card bg-white rounded-2xl overflow-hidden border border-slate-200/50 transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-slate-900/10" data-category="${product.category}">
+                        <img src="${product.img}" alt="${product.name}" class="h-56 w-full object-cover">
+                        <div class="p-5">
+                            <p class="text-sm font-semibold text-brand-medium">${product.producer}</p>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1">${product.name}</h3>
+                            <div class="mt-5 space-y-3">
+                                <button class="w-full text-center py-2.5 rounded-lg border-2 border-slate-300 text-brand-medium font-semibold transition-colors hover:border-brand-dark">Acheter seul : ${product.price}</button>
+                                <button onclick="showModal('${product.id}')" class="w-full text-center py-2.5 rounded-lg bg-brand-blue text-white font-bold transition-colors hover:bg-opacity-90 flex items-center justify-center space-x-2">
+                                    <i data-lucide="users" class="w-5 h-5"></i><span>Grouper : ${product.groupPrice}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                productGrid.insertAdjacentHTML('beforeend', card);
+            });
+            lucide.createIcons();
+        }
+        
+        let priceBreakdownChart = null;
+        function showModal(productId) {
+            const product = products.find(p => p.id == productId);
+            if (!product) return;
+
+            openModal('group-creation-modal');
+            document.getElementById('group-modal-title').textContent = `${product.name} - Prix groupé : ${product.groupPrice}`;
+
+            const ctx = document.getElementById('priceBreakdownChart').getContext('2d');
+            
+            if(priceBreakdownChart) {
+                priceBreakdownChart.destroy();
+            }
+
+            priceBreakdownChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Part du Producteur', 'Part de CoBuy', 'Frais & Taxes'],
+                    datasets: [{
+                        data: [65, 25, 10], // Example data
+                        backgroundColor: ['#3b82f6', '#94a3b8', '#f59e0b'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#64748b',
+                                boxWidth: 12,
+                                padding: 20,
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function openModal(modalId) {
+             const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('.modal-enter, .modal-leave');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (modalContent) {
+                modalContent.classList.remove('modal-leave');
+                modalContent.classList.add('modal-enter');
+            }
+            goToStep1(); 
+             lucide.createIcons();
+        }
+        
+        function openLoginModal() { openModal('login-modal'); }
+        function openAboutModal() { openModal('about-modal'); }
+        function openClientSpace() { renderClientSpaceTabs(); openModal('client-space-modal'); }
+        
+        function closeModal(modalId, event) {
+            if (event) event.stopPropagation();
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const modalContent = modal.querySelector('.modal-enter, .modal-leave');
+            if (modalContent) {
+                modalContent.classList.remove('modal-enter');
+                modalContent.classList.add('modal-leave');
+            }
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+
+        function goToStep1() {
+            const step1 = document.getElementById('group-step-1');
+            const step2 = document.getElementById('group-step-2');
+            const step3 = document.getElementById('group-step-3');
+            if (step1 && step2 && step3) {
+                step1.classList.remove('hidden');
+                step2.classList.add('hidden');
+                step3.classList.add('hidden');
+            }
+        }
+        function goToStep2() {
+            const step1 = document.getElementById('group-step-1');
+            const step2 = document.getElementById('group-step-2');
+            if (step1 && step2) {
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                lucide.createIcons();
+            }
+        }
+         function goToJoinStep() {
+            const step1 = document.getElementById('group-step-1');
+            const step3 = document.getElementById('group-step-3');
+            if (step1 && step3) {
+                step1.classList.add('hidden');
+                step3.classList.remove('hidden');
+                lucide.createIcons();
+            }
+        }
+
+        function copyLink() {
+            const linkInput = document.getElementById('share-link');
+            const isIOS = navigator.userAgent.match(/ipad|iphone/i);
+            if (isIOS) {
+                linkInput.setSelectionRange(0, linkInput.value.length);
+            } else {
+                linkInput.select();
+            }
+
+            try {
+                document.execCommand('copy');
+                const feedback = document.getElementById('copy-feedback');
+                feedback.textContent = 'Lien copié !';
+                setTimeout(() => { feedback.textContent = ''; }, 2000);
+            } catch (err) {
+                 const feedback = document.getElementById('copy-feedback');
+                feedback.textContent = 'Erreur de copie';
+                setTimeout(() => { feedback.textContent = ''; }, 2000);
+            }
+        }
+
+
+        function renderClientSpaceTabs() {
+            renderOrdersTab();
+            renderHubTab();
+            renderGroupsTab();
+            changeTab('tab-groupes');
+        }
+
+        function renderOrdersTab() {
+            const container = document.getElementById('tab-commandes');
+            container.innerHTML = `<p class="text-center text-brand-medium">Simulation : ici s'afficheront vos commandes passées.</p>`;
+        }
+        
+        function renderHubTab() {
+            const cagnotteAmount = 8.72;
+            const withdrawalThreshold = 10.00;
+            const progressPercentage = Math.min((cagnotteAmount / withdrawalThreshold) * 100, 100);
+            const isWithdrawalDisabled = cagnotteAmount < withdrawalThreshold;
+
+            document.getElementById('tab-hub').innerHTML = `
+                <div class="space-y-6">
+                     <div class="text-center">
+                        <h2 class="text-2xl font-bold text-brand-dark">Mon Espace Partenaire</h2>
+                        <p class="text-brand-medium mt-1">Ici, votre contribution à la communauté est valorisée.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-brand-medium">Votre Cagnotte Actuelle</p>
+                        <p class="text-5xl font-extrabold text-brand-dark my-2">${cagnotteAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-brand-dark">Utiliser comme cagnotte</h3>
+                        <p class="text-sm text-brand-medium mt-1">Utilisez votre solde pour réduire le montant de vos prochains achats.</p>
+                        <button class="w-full mt-4 bg-brand-blue text-white py-2.5 rounded-lg font-semibold shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform">Appliquer sur ma prochaine commande</button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-brand-dark">Verser sur mon compte bancaire</h3>
+                        <p class="text-sm text-brand-medium mt-1">Une fois le seuil de 10,00 € atteint, vous pouvez demander un versement.</p>
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm font-medium text-brand-medium mb-1">
+                                <span>Progression</span>
+                                <span>${cagnotteAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })} / ${withdrawalThreshold.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-brand-blue h-2.5 rounded-full" style="width: ${progressPercentage}%"></div>
+                            </div>
+                        </div>
+                        <button 
+                            class="w-full mt-4 py-2.5 rounded-lg font-semibold transition-colors ${isWithdrawalDisabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-brand-dark text-white hover:bg-opacity-90'}" 
+                            ${isWithdrawalDisabled ? 'disabled' : ''}
+                        >
+                            Demander un versement
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        function renderGroupsTab() {
+            const container = document.getElementById('tab-groupes');
+            const activeGroups = orders.filter(o => o.status === 'en cours');
+            if (activeGroups.length === 0) {
+                 container.innerHTML = `<div class="text-center p-8 bg-white rounded-xl border border-slate-200"><i data-lucide="info" class="w-10 h-10 text-brand-medium mx-auto"></i><p class="mt-4 text-brand-medium">Vous n'avez aucun groupe en cours. Lancez-en un depuis une fiche produit !</p></div>`;
+                 lucide.createIcons();
+                 return;
+            }
+            container.innerHTML = activeGroups.map(order => {
+                const product = products.find(p => p.id === order.productId);
+                let memberSlots = '';
+                for (let i = 0; i < order.groupSize; i++) {
+                    if (i < order.members) {
+                        memberSlots += `<div class="flex flex-col items-center space-y-1"><div class="w-12 h-12 rounded-full bg-brand-blue flex items-center justify-center"><i data-lucide="user-check" class="w-6 h-6 text-white"></i></div><p class="text-xs text-brand-medium">Vous</p></div>`;
+                    } else {
+                         memberSlots += `<div class="flex flex-col items-center space-y-1"><div class="w-12 h-12 rounded-full bg-slate-200 border-2 border-dashed border-slate-400 flex items-center justify-center"><i data-lucide="user-plus" class="w-6 h-6 text-slate-500"></i></div><p class="text-xs text-slate-500">Inviter</p></div>`;
+                    }
+                }
+
+                return `
+                <div class="bg-white p-4 rounded-xl border-2 border-brand-blue">
+                    <p class="font-bold text-brand-dark">${product.name}</p>
+                    <div class="my-4 text-center">
+                        <p class="text-sm text-brand-medium">Encore <span class="font-bold text-brand-dark">${order.groupSize - order.members} ami(s)</span> à inviter !</p>
+                        <p class="text-xs text-amber-500 font-semibold mt-1">Expire dans : ${order.timeLeft}</p>
+                    </div>
+                    <div class="flex justify-center space-x-4">${memberSlots}</div>
+                    <button class="w-full mt-6 bg-brand-blue text-white py-2.5 rounded-lg font-bold flex items-center justify-center space-x-2 hover:bg-opacity-90 transition-opacity">
+                        <i data-lucide="send" class="w-5 h-5"></i><span>Partager le lien d'invitation</span>
+                    </button>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterButtons = document.querySelectorAll('.category-button');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderProducts(button.dataset.category);
+                });
+            });
+            document.querySelector('.category-button[data-category="tous"]').classList.add('active');
+            renderProducts('tous');
+            
+            const clientSpaceTabs = document.querySelectorAll('.client-space-tab');
+            clientSpaceTabs.forEach(tab => {
+                tab.addEventListener('click', () => changeTab(tab.dataset.tab));
+            });
+
+            const scenarios = {
+                lancement: { members: 500, maxRevenue: 5000, defaultRevenue: 2500 },
+                croissance: { members: 5000, maxRevenue: 50000, defaultRevenue: 22000 },
+                etabli: { members: 25000, maxRevenue: 200000, defaultRevenue: 110000 }
+            };
+            let currentScenario = 'lancement';
+
+            const hubSlider = document.getElementById('hubSlider');
+            const revenueValue = document.getElementById('revenueValue');
+            const userShare = document.getElementById('userShare');
+            const memberCountEl = document.getElementById('memberCount');
+            const scenarioButtons = document.querySelectorAll('.scenario-button');
+
+            function updateSimulation() {
+                const revenue = parseFloat(hubSlider.value);
+                const { members } = scenarios[currentScenario];
+                revenueValue.textContent = `${revenue.toLocaleString('fr-FR')} €`;
+                memberCountEl.textContent = `${members.toLocaleString('fr-FR')}`;
+                const communityPot = revenue * 0.50;
+                const individualShare = communityPot / members;
+                userShare.textContent = `${individualShare.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`;
+            };
+            function updateScenario(scenarioKey) {
+                currentScenario = scenarioKey;
+                const scenario = scenarios[scenarioKey];
+                hubSlider.max = scenario.maxRevenue;
+                hubSlider.value = scenario.defaultRevenue;
+                scenarioButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn.dataset.scenario === scenarioKey) btn.classList.add('active');
+                });
+                updateSimulation();
+            };
+
+            if (hubSlider) {
+                scenarioButtons.forEach(btn => btn.addEventListener('click', () => updateScenario(btn.dataset.scenario)));
+                hubSlider.addEventListener('input', updateSimulation);
+                updateScenario('lancement');
+            }
+        });
+
+        function changeTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.client-space-tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.tab === tabId) t.classList.add('active');
+            });
+        }
+    </script>
+
+</body>
+</html>
+
