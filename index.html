@@ -355,8 +355,7 @@
             const shareText = encodeURIComponent(`Salut ! J'ai créé un groupe sur CoBuy pour acheter ${product.name} à un super prix. Rejoins-nous : ${fullInvitationUrl}`);
             
             document.querySelectorAll('#group-step-2 a').forEach(el => {
-                let baseUrl = el.href.split('?')[0].split('#')[0];
-                 if (el.id === 'whatsapp-share') {
+                if (el.id === 'whatsapp-share') {
                     el.href = `https://api.whatsapp.com/send?text=${shareText}`;
                 } else if (el.id === 'twitter-share') {
                      el.href = `https://twitter.com/intent/tweet?text=${shareText}`;
