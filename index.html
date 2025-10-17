@@ -213,19 +213,19 @@
                             <i data-lucide="message-circle" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">WhatsApp</span>
                         </a>
-                         <a id="instagram-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
+                         <a id="instagram-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
                             <i data-lucide="instagram" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Instagram</span>
                         </a>
-                         <a id="tiktok-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
+                         <a id="tiktok-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
                             <i data-lucide="clapperboard" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">TikTok</span>
                         </a>
-                        <a id="discord-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
+                        <a id="discord-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
                             <i data-lucide="message-square" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Discord</span>
                         </a>
-                        <a id="signal-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
+                        <a id="signal-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
                             <i data-lucide="send" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Signal</span>
                         </a>
@@ -356,14 +356,14 @@
             
             document.querySelectorAll('#group-step-2 a').forEach(el => {
                 let baseUrl = el.href.split('?')[0].split('#')[0];
-                 if (baseUrl.includes('whatsapp') || baseUrl.includes('twitter')) {
-                    // Handled separately
+                 if (el.id === 'whatsapp-share') {
+                    el.href = `https://api.whatsapp.com/send?text=${shareText}`;
+                } else if (el.id === 'twitter-share') {
+                     el.href = `https://twitter.com/intent/tweet?text=${shareText}`;
                 } else {
-                    el.href = `${invitationUrl}`;
+                    el.href = invitationUrl;
                 }
             });
-            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareText}`;
-            document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?text=${shareText}`;
             
             document.getElementById('share-link').value = invitationUrl;
             
@@ -443,11 +443,9 @@
         function goToStep1() {
             const step1 = document.getElementById('group-step-1');
             const step2 = document.getElementById('group-step-2');
-            const step3 = document.getElementById('group-step-3');
-            if (step1 && step2 ) { //&& step3) {
+            if (step1 && step2) {
                 step1.classList.remove('hidden');
                 step2.classList.add('hidden');
-                //step3.classList.add('hidden');
             }
         }
         function goToStep2() {
