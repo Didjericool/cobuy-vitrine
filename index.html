@@ -100,13 +100,11 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-16">
                         <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark tracking-tighter">Le Marché</h2>
-                        <p class="mt-4 max-w-2xl mx-auto text-lg text-brand-medium">Plus on est, moins c'est cher. C'est aussi simple que ça.</p>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-brand-medium">Bienvenue dans la boutique pilote de [Nom de la marque de votre ami]</p>
                     </div>
                     <div id="category-filters" class="flex flex-wrap justify-center gap-4 mb-12">
                         <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="tous"><i data-lucide="layout-grid" class="w-5 h-5"></i><span>Tous</span></button>
                         <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="eliquide"><i data-lucide="droplet" class="w-5 h-5"></i><span>E-Liquides</span></button>
-                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="epicerie"><i data-lucide="shopping-basket" class="w-5 h-5"></i><span>Épicerie</span></button>
-                        <button class="category-button flex items-center space-x-2 px-5 py-2 rounded-full font-semibold text-brand-dark bg-transparent border-2 border-slate-200 transition-all duration-300" data-category="boissons"><i data-lucide="cup-soda" class="w-5 h-5"></i><span>Boissons</span></button>
                     </div>
                     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
                 </div>
@@ -180,13 +178,13 @@
                             <div class="mt-4 space-y-3">
                                 <input type="radio" name="logistics" id="choice1" class="hidden logistics-choice" checked>
                                 <label for="choice1" class="w-full text-left p-3 rounded-xl border-2 border-slate-300 hover:border-brand-blue cursor-pointer transition-colors block">
-                                    <h4 class="font-semibold text-brand-dark">Point Relais de Quartier</h4>
-                                    <p class="text-xs text-brand-medium">Simple et économique. Récupérez votre panier chez un commerçant près de chez vous.</p>
+                                    <h4 class="font-semibold text-brand-dark">Groupe de Zone</h4>
+                                    <p class="text-xs text-brand-medium">Chacun est livré chez soi, dans la même zone de livraison.</p>
                                 </label>
                                 <input type="radio" name="logistics" id="choice2" class="hidden logistics-choice">
                                 <label for="choice2" class="w-full text-left p-3 rounded-xl border-2 border-slate-300 hover:border-brand-blue cursor-pointer transition-colors block">
-                                    <h4 class="font-semibold text-brand-dark">Devenir Voisin-Relais</h4>
-                                    <p class="text-xs text-brand-medium">Recevez la commande du groupe chez vous et créez du lien.</p>
+                                    <h4 class="font-semibold text-brand-dark">Groupe d'Amis</h4>
+                                    <p class="text-xs text-brand-medium">Livraison unique chez vous. Invitez qui vous voulez !</p>
                                 </label>
                             </div>
                         </div>
@@ -194,18 +192,6 @@
                     <button onclick="goToStep2()" class="w-full mt-8 bg-brand-blue text-white py-3 font-bold rounded-lg flex items-center justify-center transition-transform hover:scale-105">
                         Créer le groupe et partager
                     </button>
-
-                    <div class="relative text-center my-6">
-                        <hr class="border-slate-200">
-                        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-2 text-sm font-semibold text-brand-medium">OU</span>
-                    </div>
-
-                     <div>
-                        <button onclick="goToJoinStep()" class="w-full text-center py-3 rounded-lg bg-brand-blue text-white font-bold transition-colors hover:bg-opacity-90 flex items-center justify-center space-x-2">
-                            Rejoindre un groupe existant
-                        </button>
-                    </div>
-
                 </div>
 
                 <!-- Step 2: Share -->
@@ -215,7 +201,7 @@
                     <p class="mt-2 text-center text-brand-medium">Partagez ce lien unique avec vos amis pour remplir le groupe avant Dimanche 19h.</p>
                     
                     <div class="mt-8 flex">
-                        <input type="text" id="share-link" readonly value="invitation-groupe.html" class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
+                        <input type="text" id="share-link" readonly value="invitation.html" class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
                         <button onclick="copyLink()" class="bg-slate-200 px-4 rounded-r-lg hover:bg-slate-300 transition-colors flex items-center justify-center">
                             <i data-lucide="copy" class="w-5 h-5 text-brand-dark"></i>
                         </button>
@@ -223,62 +209,32 @@
                     <p id="copy-feedback" class="text-center text-sm text-brand-blue font-semibold h-5 mt-1"></p>
                     
                      <div class="mt-4 grid grid-cols-3 gap-4">
-                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors space-y-1">
+                        <a id="whatsapp-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors space-y-1">
                             <i data-lucide="message-circle" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">WhatsApp</span>
                         </a>
-                         <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
+                         <a id="instagram-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity space-y-1">
                             <i data-lucide="instagram" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Instagram</span>
                         </a>
-                         <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
+                         <a id="tiktok-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors space-y-1">
                             <i data-lucide="clapperboard" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">TikTok</span>
                         </a>
-                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
+                        <a id="discord-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors space-y-1">
                             <i data-lucide="message-square" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Discord</span>
                         </a>
-                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
+                        <a id="signal-share" href="invitation.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors space-y-1">
                             <i data-lucide="send" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">Signal</span>
                         </a>
-                        <a href="invitation-groupe.html" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors space-y-1">
+                        <a id="twitter-share" href="#" target="_blank" class="flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors space-y-1">
                             <i data-lucide="twitter" class="w-6 h-6"></i>
                             <span class="text-sm font-semibold">X / Twitter</span>
                         </a>
                     </div>
                 </div>
-
-                <!-- Step 3: Join a group -->
-                <div id="group-step-3" class="hidden">
-                     <button onclick="goToStep1()" class="absolute top-4 left-4 text-slate-400 hover:text-brand-dark"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
-                    <h2 class="text-2xl font-bold text-brand-dark text-center">Rejoindre un groupe</h2>
-                    <p class="mt-2 text-center text-brand-medium">Voici les groupes ouverts pour ce produit près de chez vous.</p>
-                     <div class="mt-6 space-y-3">
-                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                            <div>
-                                <p class="font-semibold text-brand-dark">Groupe de Marie D.</p>
-                                <p class="text-xs text-brand-medium">Point Relais : Le Narval (Wazemmes)</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-brand-blue">2/3 places</p>
-                                <button class="text-xs font-bold text-white bg-brand-blue px-3 py-1 rounded-full mt-1 hover:bg-opacity-80">Rejoindre</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                            <div>
-                                <p class="font-semibold text-brand-dark">Groupe de Paul L.</p>
-                                <p class="text-xs text-brand-medium">Voisin-Relais : Rue Gambetta</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-brand-blue">1/3 places</p>
-                                <button class="text-xs font-bold text-white bg-brand-blue px-3 py-1 rounded-full mt-1 hover:bg-opacity-80">Rejoindre</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <button onclick="closeModal('group-creation-modal', event)" class="absolute top-4 right-4 text-slate-400 hover:text-brand-dark">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
@@ -354,15 +310,12 @@
         const products = [
              { id: 1, name: 'Menthe Glaciale', category: 'eliquide', desc: 'Une vague de fraîcheur intense.', price: '19,90 €', groupPrice: '12,90 €', img: 'https://images.unsplash.com/photo-1614213853103-68e4c3b00609?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Vapeur du Nord' },
              { id: 2, name: 'Caramel Fou', category: 'eliquide', desc: 'La douceur d\'un caramel au beurre salé.', price: '21,90 €', groupPrice: '14,90 €', img: 'https://images.unsplash.com/photo-1542025752763-a2a89326b876?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Vapeur du Nord' },
-             { id: 4, name: 'Miel de Fleurs', category: 'epicerie', desc: 'Un miel polyfloral doux et onctueux.', price: '12,50 €', groupPrice: '8,50 €', img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Apiculteur Local' },
-             { id: 6, name: 'Bière Blonde', category: 'boissons', desc: 'Une bière légère et rafraîchissante.', price: '4,50 €', groupPrice: '3,00 €', img: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Brasserie Régionale' },
-             { id: 5, name: 'Terrine de Campagne', category: 'epicerie', desc: 'Recette traditionnelle, un classique.', price: '8,90 €', groupPrice: '5,90 €', img: 'https://images.unsplash.com/photo-1599599810694-b5b37306c459?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Artisan Charcutier' },
-             { id: 7, name: 'Jus de Pomme', category: 'boissons', desc: '100% pur jus, sans sucres ajoutés.', price: '6,20 €', groupPrice: '4,20 €', img: 'https://images.unsplash.com/photo-1591735161314-726c5147814c?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Le Verger d\'à côté' },
+             { id: 3, name: 'Explosion de Fruits Rouges', category: 'eliquide', desc: 'Un cocktail acidulé et intense.', price: '20,90 €', groupPrice: '13,90 €', img: 'https://images.unsplash.com/photo-1624591404533-b31c890a9b0c?q=80&w=800&h=600&auto=format&fit=crop', producer: 'Vapeur du Nord' },
         ];
+        
         const orders = [
-            { id: 'CMD-123', productId: 4, date: '10/10/2025', status: 'validé', price: 8.50, breakdown: { producer: 5.50, platform: 1.15, fees: 0.35, tva: 1.50 } },
-            { id: 'CMD-124', productId: 6, date: '11/10/2025', status: 'en cours', groupSize: 3, members: 1, timeLeft: '23h 15m' },
-            { id: 'CMD-125', productId: 2, date: '08/10/2025', status: 'livré', price: 14.90, breakdown: { producer: 9.80, platform: 2.50, fees: 0.50, tva: 2.10 } }
+            { id: 'CMD-124', productId: 1, date: '11/10/2025', status: 'en cours', groupSize: 3, members: 1, timeLeft: '23h 15m' },
+            { id: 'CMD-125', productId: 2, date: '08/10/2025', status: 'livré', price: 14.90 }
         ];
 
         const productGrid = document.getElementById('product-grid');
@@ -396,6 +349,66 @@
 
             openModal('group-creation-modal');
             document.getElementById('group-modal-title').textContent = `${product.name} - Prix groupé : ${product.groupPrice}`;
+            
+            const invitationUrl = `invitation.html?id=${product.id}`;
+            const fullInvitationUrl = new URL(invitationUrl, window.location.href).href;
+            const shareText = encodeURIComponent(`Salut ! J'ai créé un groupe sur CoBuy pour acheter ${product.name} à un super prix. Rejoins-nous : ${fullInvitationUrl}`);
+            
+            document.querySelectorAll('#group-step-2 a').forEach(el => {
+                let baseUrl = el.href.split('?')[0].split('#')[0];
+                 if (baseUrl.includes('whatsapp') || baseUrl.includes('twitter')) {
+                    // Handled separately
+                } else {
+                    el.href = `${invitationUrl}`;
+                }
+            });
+            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareText}`;
+            document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?text=${shareText}`;
+            
+            document.getElementById('share-link').value = invitationUrl;
+            
+            const ctx = document.getElementById('priceBreakdownChart');
+            if(ctx) {
+                if(priceBreakdownChart) {
+                    priceBreakdownChart.destroy();
+                }
+
+                priceBreakdownChart = new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Part du Producteur', 'Part de CoBuy', 'Frais & Taxes'],
+                        datasets: [{
+                            data: [70, 20, 10], 
+                            backgroundColor: ['#3b82f6', '#94a3b8', '#f59e0b'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#64748b',
+                                    boxWidth: 12,
+                                    padding: 20,
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
         
         function openModal(modalId) {
@@ -431,10 +444,10 @@
             const step1 = document.getElementById('group-step-1');
             const step2 = document.getElementById('group-step-2');
             const step3 = document.getElementById('group-step-3');
-            if (step1 && step2 && step3) {
+            if (step1 && step2 ) { //&& step3) {
                 step1.classList.remove('hidden');
                 step2.classList.add('hidden');
-                step3.classList.add('hidden');
+                //step3.classList.add('hidden');
             }
         }
         function goToStep2() {
@@ -446,29 +459,29 @@
                 lucide.createIcons();
             }
         }
-         function goToJoinStep() {
-            const step1 = document.getElementById('group-step-1');
-            const step3 = document.getElementById('group-step-3');
-            if (step1 && step3) {
-                step1.classList.add('hidden');
-                step3.classList.remove('hidden');
-                lucide.createIcons();
-            }
-        }
 
         function copyLink() {
             const linkInput = document.getElementById('share-link');
-            const isIOS = navigator.userAgent.match(/ipad|iphone/i);
-            if (isIOS) {
-                linkInput.setSelectionRange(0, linkInput.value.length);
-            } else {
-                linkInput.select();
+            const fullUrl = new URL(linkInput.value, window.location.href).href;
+            
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = fullUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                const feedback = document.getElementById('copy-feedback');
+                feedback.textContent = 'Lien copié !';
+                setTimeout(() => { feedback.textContent = ''; }, 2000);
+            } catch (err) {
+                 const feedback = document.getElementById('copy-feedback');
+                feedback.textContent = 'Erreur de copie';
+                setTimeout(() => { feedback.textContent = ''; }, 2000);
             }
-            document.execCommand('copy');
-
-            const feedback = document.getElementById('copy-feedback');
-            feedback.textContent = 'Lien copié !';
-            setTimeout(() => { feedback.textContent = ''; }, 2000);
+            document.body.removeChild(tempInput);
         }
 
 
@@ -577,9 +590,11 @@
             renderProducts('tous');
             
             const clientSpaceTabs = document.querySelectorAll('.client-space-tab');
-            clientSpaceTabs.forEach(tab => {
-                tab.addEventListener('click', () => changeTab(tab.dataset.tab));
-            });
+            if (clientSpaceTabs) {
+                clientSpaceTabs.forEach(tab => {
+                    tab.addEventListener('click', () => changeTab(tab.dataset.tab));
+                });
+            }
         });
 
         function changeTab(tabId) {
