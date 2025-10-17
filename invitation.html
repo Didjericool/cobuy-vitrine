@@ -6,6 +6,8 @@
     <title>Vous êtes invité ! - CoBuy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SUPABASE CLIENT -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
         
@@ -26,14 +28,14 @@
     <header class="border-b border-slate-200">
         <nav class="max-w-4xl mx-auto px-6 py-6 flex justify-between items-center">
             <div>
-                <a href="cobuy-vitrine.html" class="text-3xl font-extrabold text-brand-dark tracking-tighter">CoBuy</a>
+                <a href="index.html" class="text-3xl font-extrabold text-brand-dark tracking-tighter">CoBuy</a>
                 <p class="text-xs text-brand-medium -mt-1 tracking-wider font-semibold">L'EFFET GROUPE</p>
             </div>
             <p class="font-semibold text-brand-medium">Vous êtes invité !</p>
         </nav>
     </header>
 
-    <main class="max-w-2xl mx-auto px-6 py-12">
+    <main id="invitation-content" class="max-w-2xl mx-auto px-6 py-12">
         <div class="text-center">
             <p class="text-xl text-brand-medium">
                 <span class="font-bold text-brand-dark">Marie D.</span> vous invite à rejoindre son groupe pour profiter d'un super prix !
@@ -41,13 +43,13 @@
         </div>
 
         <div class="mt-8 bg-white rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=800&h=600&auto=format&fit=crop" alt="Miel de Fleurs" class="w-full h-64 object-cover">
+            <img id="product-image" src="" alt="Image du produit" class="w-full h-64 object-cover bg-slate-100">
             <div class="p-6">
-                <p class="text-sm font-semibold text-brand-medium">Apiculteur Local</p>
-                <h1 class="text-2xl font-bold text-brand-dark mt-1">Miel de Fleurs</h1>
+                <p id="product-producer" class="text-sm font-semibold text-brand-medium"></p>
+                <h1 id="product-name" class="text-2xl font-bold text-brand-dark mt-1">Chargement...</h1>
                 <div class="flex items-baseline justify-center space-x-3 mt-4">
-                    <span class="text-4xl font-extrabold text-brand-blue">8,50 €</span>
-                    <span class="text-xl font-semibold text-brand-medium line-through">12,50 €</span>
+                    <span id="product-group-price" class="text-4xl font-extrabold text-brand-blue"></span>
+                    <span id="product-price" class="text-xl font-semibold text-brand-medium line-through"></span>
                 </div>
             </div>
         </div>
@@ -109,7 +111,74 @@
     </main>
 
     <script>
+        // --- CONNEXION SUPABASE ---
+        const SUPABASE_URL = https://ofivjnhappfqnlhphmbd.supabase.co; 
+        const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9maXZqbmhhcHBmcW5saHBobWJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2ODg3MDQsImV4cCI6MjA3NjI2NDcwNH0.rZAgu8-aCLpk8Ezd7fuTt_cypI76EO5Y4e8eMrIPe6I;
+        
+        let supabaseClient;
+        if (SUPABASE_URL.startsWith('VOTRE_') || SUPABASE_ANON_KEY.startsWith('VOTRE_')) {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('invitation-content').innerHTML = `
+                    <div class="text-center p-8 bg-rose-50 border-l-4 border-rose-500 rounded-lg">
+                        <h2 class="text-2xl font-bold text-rose-800">Erreur de Configuration</h2>
+                        <p class="mt-4 text-rose-700">
+                            Les clés d'accès Supabase ne sont pas configurées. Veuillez suivre le guide pour remplacer 'VOTRE_URL_SUPABASE' et 'VOTRE_CLÉ_ANON_SUPABASE' dans le code avec vos propres clés.
+                        </p>
+                    </div>`;
+            });
+        } else {
+            const { createClient } = supabase;
+            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+        // -------------------------
+
         lucide.createIcons();
+
+        async function fetchProduct(productId) {
+            if (!supabaseClient) return null;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .eq('id', productId)
+                    .single();
+                
+                if (error) {
+                    console.error("Erreur lors de la récupération du produit:", error);
+                    return null;
+                }
+                return data;
+            } catch(e) {
+                console.error(e);
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!supabaseClient) return; // Stop execution if Supabase is not configured
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                document.getElementById('invitation-content').innerHTML = '<p class="text-center text-red-500">Erreur: Aucun produit spécifié.</p>';
+                return;
+            }
+
+            const product = await fetchProduct(productId);
+
+            if (product) {
+                document.getElementById('product-image').src = product.img;
+                document.getElementById('product-image').alt = product.name;
+                document.getElementById('product-producer').textContent = product.producer;
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-group-price').textContent = product.groupPrice;
+                document.getElementById('product-price').textContent = product.price;
+            } else {
+                 document.getElementById('invitation-content').innerHTML = '<p class="text-center text-red-500">Produit non trouvé.</p>';
+            }
+        });
     </script>
 </body>
 </html>
+
